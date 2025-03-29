@@ -21,6 +21,7 @@ namespace ServiceOrderCreatorApi.Mappers
                 Name = user.UserName!,
                 Email = user.Email!,
                 Token = token,
+                ProfilePictureFile = user.ProfilePictureFile,
             };
         }
     }

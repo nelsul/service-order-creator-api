@@ -25,6 +25,11 @@ namespace ServiceOrderCreatorApi.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
                 var userCreate = await _userService.RegisterAsync(registerUserDTO);
 
                 if (userCreate)
@@ -33,6 +38,30 @@ namespace ServiceOrderCreatorApi.Controllers
                 }
 
                 return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message, Details = ex.Data });
+            }
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginUserDTO loginUserDTO)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var user = await _userService.LoginAsync(loginUserDTO);
+
+                return Ok(user);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
             }
             catch (Exception ex)
             {
