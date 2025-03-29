@@ -18,5 +18,8 @@ namespace ServiceOrderCreatorApi.DTOs.User
 
         [Required]
         public string Password { get; set; } = string.Empty;
+
+        [Required]
+        public IFormFile? Image { get; set; }
     }
 }

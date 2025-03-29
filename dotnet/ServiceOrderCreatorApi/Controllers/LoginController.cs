@@ -20,9 +20,19 @@ namespace ServiceOrderCreatorApi.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterUserDTO registerUserDTO)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Register([FromForm] RegisterUserDTO registerUserDTO)
         {
-            return Ok(registerUserDTO);
+            try
+            {
+                var user = await _userService.RegisterAsync(registerUserDTO);
+
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message, Details = ex.Data });
+            }
         }
     }
 }

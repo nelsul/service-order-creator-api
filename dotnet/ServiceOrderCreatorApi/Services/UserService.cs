@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using ServiceOrderCreatorApi.DTOs.User;
 using ServiceOrderCreatorApi.Interfaces.Services;
+using ServiceOrderCreatorApi.Mappers;
 using ServiceOrderCreatorApi.Models;
 
 namespace ServiceOrderCreatorApi.Services
@@ -23,9 +24,29 @@ namespace ServiceOrderCreatorApi.Services
             throw new NotImplementedException();
         }
 
-        public Task<UserDTO> RegisterAsync(RegisterUserDTO registerUserDTO, IFormFile image)
+        public async Task<UserDTO> RegisterAsync(RegisterUserDTO registerUserDTO)
         {
-            throw new NotImplementedException();
+            var user = registerUserDTO.ToUser();
+
+            var createUser = await _userManager.CreateAsync(user, registerUserDTO.Password);
+
+            if (!createUser.Succeeded)
+            {
+                var ex = new Exception("Erro while creating user");
+                ex.Data["Details"] = createUser.Errors;
+                throw ex;
+            }
+
+            var createRole = await _userManager.AddToRoleAsync(user, "User");
+
+            if (!createRole.Succeeded)
+            {
+                var ex = new Exception("Erro while creating user role");
+                ex.Data["Details"] = createRole.Errors;
+                throw ex;
+            }
+
+            return user.ToDTO("");
         }
     }
 }

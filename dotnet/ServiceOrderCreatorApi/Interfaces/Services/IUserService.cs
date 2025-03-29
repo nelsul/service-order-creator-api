@@ -8,7 +8,7 @@ namespace ServiceOrderCreatorApi.Interfaces.Services
 {
     public interface IUserService
     {
-        Task<UserDTO> RegisterAsync(RegisterUserDTO registerUserDTO, IFormFile image);
+        Task<UserDTO> RegisterAsync(RegisterUserDTO registerUserDTO);
 
         Task<UserDTO> LoginAsync(LoginUserDTO loginUserDTO);
     }

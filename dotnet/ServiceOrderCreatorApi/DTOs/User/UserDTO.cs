@@ -12,5 +12,7 @@ namespace ServiceOrderCreatorApi.DTOs.User
         public string Email { get; set; } = string.Empty;
 
         public string ProfilePictureFile { get; set; } = string.Empty;
+
+        public string Token { get; set; } = string.Empty;
     }
 }
