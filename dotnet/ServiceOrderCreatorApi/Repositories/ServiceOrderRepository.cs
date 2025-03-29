@@ -41,14 +41,22 @@ namespace ServiceOrderCreatorApi.Repositories
             return serviceOrders;
         }
 
-        public Task<ServiceOrder> GetByIdAsync(string guid)
+        public async Task<ServiceOrder?> GetByIdAsync(string guid)
         {
-            throw new NotImplementedException();
+            var serviceOrder = await _context.ServiceOrders.FirstOrDefaultAsync(so =>
+                so.Guid == guid
+            );
+
+            return serviceOrder;
         }
 
-        public Task<ServiceOrder> UpdateAsync(string guid, ServiceOrder serviceOrder)
+        public async Task<ServiceOrder> UpdateAsync(ServiceOrder serviceOrder)
         {
-            throw new NotImplementedException();
+            _context.ServiceOrders.Update(serviceOrder);
+
+            await _context.SaveChangesAsync();
+
+            return serviceOrder;
         }
     }
 }

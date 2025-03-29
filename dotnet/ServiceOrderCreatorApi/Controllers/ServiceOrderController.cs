@@ -70,5 +70,33 @@ namespace ServiceOrderCreatorApi.Controllers
                 return StatusCode(500, new { Message = ex.Message, Details = ex.Data });
             }
         }
+
+        [HttpPost("image")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> AddImage(
+            [FromForm] AddImageServiceOrderDTO addImageServiceOrderDTO
+        )
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return Unauthorized("Invalid token.");
+                }
+
+                var serviceOrder = await _serviceOrderService.AddImageAsync(
+                    userId,
+                    addImageServiceOrderDTO
+                );
+
+                return Ok(serviceOrder);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message, Details = ex.Data });
+            }
+        }
     }
 }
