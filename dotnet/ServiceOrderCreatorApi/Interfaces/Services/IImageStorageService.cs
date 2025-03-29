@@ -10,6 +10,8 @@ namespace ServiceOrderCreatorApi.Interfaces.Services
     {
         public Task<string> StoreAsync(string folderPath, IFormFile imageFile);
 
-        public Task<byte[]> GetAsync(string filePath, int? width, int? height);
+        public Task<byte[]> GetAsync(string filePath, uint? width, uint? height);
+
+        public Task<bool> DeleteAsync(string filePath);
     }
 }

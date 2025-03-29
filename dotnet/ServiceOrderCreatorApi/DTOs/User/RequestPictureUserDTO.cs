@@ -13,9 +13,9 @@ namespace ServiceOrderCreatorApi.DTOs.User
         public string FileName { get; set; } = string.Empty;
 
         [Range(50, 1080)]
-        public int? Width { get; set; }
+        public uint? Width { get; set; }
 
         [Range(50, 1080)]
-        public int? Height { get; set; }
+        public uint? Height { get; set; }
     }
 }

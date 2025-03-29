@@ -73,13 +73,18 @@ namespace ServiceOrderCreatorApi.Services
 
         public async Task<bool> RegisterAsync(RegisterUserDTO registerUserDTO)
         {
+            var profilePicFileName = await SaveProfilePic(registerUserDTO.Image!);
+
             var user = registerUserDTO.ToUser();
 
             var createUser = await _userManager.CreateAsync(user, registerUserDTO.Password);
 
             if (!createUser.Succeeded)
             {
-                var ex = new Exception("Erro while creating user");
+                await _imageStorageService.DeleteAsync(
+                    Path.Combine(_storagePath, profilePicFileName)
+                );
+                var ex = new ArgumentException("Erro while creating user");
                 ex.Data["Details"] = createUser.Errors;
                 throw ex;
             }
@@ -88,12 +93,10 @@ namespace ServiceOrderCreatorApi.Services
 
             if (!createRole.Succeeded)
             {
-                var ex = new Exception("Erro while creating user role");
+                var ex = new ArgumentException("Erro while creating user role");
                 ex.Data["Details"] = createRole.Errors;
                 throw ex;
             }
-
-            var profilePicFileName = await SaveProfilePic(registerUserDTO.Image!);
 
             user.ProfilePictureFile = profilePicFileName;
 

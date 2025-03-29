@@ -39,6 +39,10 @@ namespace ServiceOrderCreatorApi.Controllers
 
                 return BadRequest();
             }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { Message = ex.Message, Details = ex.Data });
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, new { Message = ex.Message, Details = ex.Data });
