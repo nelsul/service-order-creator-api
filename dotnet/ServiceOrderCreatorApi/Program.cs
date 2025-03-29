@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ServiceOrderCreatorApi.Data;
+using ServiceOrderCreatorApi.Helpers;
 using ServiceOrderCreatorApi.Interfaces;
 using ServiceOrderCreatorApi.Interfaces.Services;
 using ServiceOrderCreatorApi.Models;
@@ -11,7 +12,13 @@ using ServiceOrderCreatorApi.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi(
+    "v1",
+    options =>
+    {
+        options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+    }
+);
 
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
@@ -74,6 +81,9 @@ if (app.Environment.IsDevelopment())
 }
 
 // app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
