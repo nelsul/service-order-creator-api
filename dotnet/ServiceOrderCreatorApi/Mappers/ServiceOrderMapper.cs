@@ -18,5 +18,10 @@ namespace ServiceOrderCreatorApi.Mappers
                 ImageFiles = serviceOrder.ImageFiles,
             };
         }
+
+        public static ShortServiceOrderDTO ToShortDTO(this ServiceOrder serviceOrder)
+        {
+            return new ShortServiceOrderDTO { Guid = serviceOrder.Guid };
+        }
     }
 }

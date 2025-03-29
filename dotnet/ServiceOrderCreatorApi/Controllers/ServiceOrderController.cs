@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,14 @@ namespace ServiceOrderCreatorApi.Controllers
         {
             try
             {
-                var serviceOrders = await _serviceOrderService.GetAllAsync();
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return Unauthorized("Invalid token.");
+                }
+
+                var serviceOrders = await _serviceOrderService.GetAllAsync(userId);
 
                 return Ok(serviceOrders);
             }

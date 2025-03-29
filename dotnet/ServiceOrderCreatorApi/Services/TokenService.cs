@@ -26,6 +26,7 @@ namespace ServiceOrderCreatorApi.Services
         {
             var claims = new List<Claim>
             {
+                new(ClaimTypes.NameIdentifier, user.Id),
                 new(JwtRegisteredClaimNames.Email, user.Email!),
                 new(JwtRegisteredClaimNames.GivenName, user.UserName!),
             };

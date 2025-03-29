@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ServiceOrderCreatorApi.DTOs.ServiceOrder;
 using ServiceOrderCreatorApi.Interfaces.Repositories;
 using ServiceOrderCreatorApi.Interfaces.Services;
+using ServiceOrderCreatorApi.Mappers;
 
 namespace ServiceOrderCreatorApi.Services
 {
@@ -17,7 +18,49 @@ namespace ServiceOrderCreatorApi.Services
             _serviceOrderRepository = serviceOrderRepository;
         }
 
-        public Task<List<ServiceOrderDTO>> GetAllAsync()
+        public Task<ServiceOrderDTO> AddImageAsync(
+            string userId,
+            AddImageServiceOrderDTO addImageServiceOrderDTO
+        )
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> CreateAsync(CreateServiceOrderDTO createServiceOrderDTO)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeleteAsync(string userId, string guid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<ShortServiceOrderDTO>> GetAllAsync(string userId)
+        {
+            var serviceOrders = await _serviceOrderRepository.GetAllByUserIdAsync(userId);
+
+            return [.. serviceOrders.Select(so => so.ToShortDTO())];
+        }
+
+        public Task<ServiceOrderDTO> GetByIdAsync(string userId, string guid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ServiceOrderDTO> RemoveImageAsync(
+            string userId,
+            RemoveImageServiceOrderDTO removeImageServiceOrderDTO
+        )
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ServiceOrderDTO> UpdateAsync(
+            string userId,
+            string guid,
+            UpdateServiceOrderDTO updateServiceOrderDTO
+        )
         {
             throw new NotImplementedException();
         }
