@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ServiceOrderCreatorApi.DTOs.User;
+using ServiceOrderCreatorApi.Interfaces;
 using ServiceOrderCreatorApi.Interfaces.Services;
 using ServiceOrderCreatorApi.Mappers;
 using ServiceOrderCreatorApi.Models;
@@ -16,16 +17,19 @@ namespace ServiceOrderCreatorApi.Services
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IImageStorageService _imageStorageService;
+        private readonly ITokenService _tokenService;
 
         public UserService(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            IImageStorageService imageStorageService
+            IImageStorageService imageStorageService,
+            ITokenService tokenService
         )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _imageStorageService = imageStorageService;
+            _tokenService = tokenService;
         }
 
         public async Task<UserDTO> LoginAsync(LoginUserDTO loginUserDTO)
@@ -50,7 +54,7 @@ namespace ServiceOrderCreatorApi.Services
                 throw new UnauthorizedAccessException("Email or Password invalid");
             }
 
-            return user.ToDTO("");
+            return user.ToDTO(_tokenService.CreateToken(user));
         }
 
         public async Task<bool> RegisterAsync(RegisterUserDTO registerUserDTO)

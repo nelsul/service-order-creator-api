@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using ServiceOrderCreatorApi.Data;
+using ServiceOrderCreatorApi.Interfaces;
 using ServiceOrderCreatorApi.Interfaces.Services;
 using ServiceOrderCreatorApi.Models;
 using ServiceOrderCreatorApi.Services;
@@ -26,8 +29,38 @@ builder
     })
     .AddEntityFrameworkStores<ApplicationDBContext>();
 
+builder
+    .Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme =
+            options.DefaultChallengeScheme =
+            options.DefaultForbidScheme =
+            options.DefaultScheme =
+            options.DefaultSignInScheme =
+            options.DefaultSignOutScheme =
+                JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters =
+            new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = builder.Configuration["JWT:Issuer"],
+                ValidateAudience = true,
+                ValidAudience = builder.Configuration["JWT:Audience"],
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"]!)
+                ),
+            };
+    });
+
+builder.Services.AddAuthorization();
+
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IImageStorageService, ImageStorageService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 var app = builder.Build();
 
