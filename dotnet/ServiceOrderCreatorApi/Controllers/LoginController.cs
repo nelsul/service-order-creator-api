@@ -25,9 +25,14 @@ namespace ServiceOrderCreatorApi.Controllers
         {
             try
             {
-                var user = await _userService.RegisterAsync(registerUserDTO);
+                var userCreate = await _userService.RegisterAsync(registerUserDTO);
 
-                return Ok(user);
+                if (userCreate)
+                {
+                    return Ok("User created.");
+                }
+
+                return BadRequest();
             }
             catch (Exception ex)
             {

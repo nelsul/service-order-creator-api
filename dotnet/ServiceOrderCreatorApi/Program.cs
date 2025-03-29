@@ -27,6 +27,7 @@ builder
     .AddEntityFrameworkStores<ApplicationDBContext>();
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IImageStorageService, ImageStorageService>();
 
 var app = builder.Build();
 

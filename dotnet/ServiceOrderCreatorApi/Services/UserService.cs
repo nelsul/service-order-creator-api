@@ -13,10 +13,12 @@ namespace ServiceOrderCreatorApi.Services
     public class UserService : IUserService
     {
         private readonly UserManager<User> _userManager;
+        private readonly IImageStorageService _imageStorageService;
 
-        public UserService(UserManager<User> userManager)
+        public UserService(UserManager<User> userManager, IImageStorageService imageStorageService)
         {
             _userManager = userManager;
+            _imageStorageService = imageStorageService;
         }
 
         public Task<UserDTO> LoginAsync(LoginUserDTO loginUserDTO)
@@ -24,7 +26,7 @@ namespace ServiceOrderCreatorApi.Services
             throw new NotImplementedException();
         }
 
-        public async Task<UserDTO> RegisterAsync(RegisterUserDTO registerUserDTO)
+        public async Task<bool> RegisterAsync(RegisterUserDTO registerUserDTO)
         {
             var user = registerUserDTO.ToUser();
 
@@ -46,7 +48,23 @@ namespace ServiceOrderCreatorApi.Services
                 throw ex;
             }
 
-            return user.ToDTO("");
+            var profilePicFileName = await SaveProfilePic(registerUserDTO.Image!);
+
+            user.ProfilePictureFile = profilePicFileName;
+
+            await _userManager.UpdateAsync(user);
+
+            return true;
+        }
+
+        private async Task<string> SaveProfilePic(IFormFile image)
+        {
+            var fileName = await _imageStorageService.StoreAsync(
+                "/Users/nelsonneto/dev/service_order_creator/api/storage/profile-pics",
+                image
+            );
+
+            return fileName;
         }
     }
 }
