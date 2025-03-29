@@ -1,0 +1,32 @@
+services:
+  api:
+    build: .
+    user: root
+    volumes:
+      - ./dotnet:/app/
+    container_name: service_order_creator_api
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+    depends_on:
+      - db
+    networks:
+      - apinet
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    user: root
+    volumes:
+      - ./db:/var/opt/mssql
+    container_name: service_order_creator_db
+    ports:
+      - 1433:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=r00t.R00T
+      - MSSQL_PID=Developer
+    networks:
+      - apinet
+networks:
+  apinet:
+    driver: bridge

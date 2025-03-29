@@ -1,0 +1,6 @@
+@ServiceOrderCreatorApi_HostAddress = http://localhost:5274
+
+GET {{ServiceOrderCreatorApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
