@@ -12,7 +12,7 @@ namespace ServiceOrderCreatorApi.Interfaces.Repositories
 
         Task<ServiceOrder> GetByIdAsync(string guid);
 
-        Task<bool> CreateAsync(ServiceOrder serviceOrder);
+        Task<ServiceOrder> CreateAsync(ServiceOrder serviceOrder);
 
         Task<ServiceOrder> UpdateAsync(string guid, ServiceOrder serviceOrder);
 

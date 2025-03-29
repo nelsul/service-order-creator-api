@@ -23,5 +23,10 @@ namespace ServiceOrderCreatorApi.Mappers
         {
             return new ShortServiceOrderDTO { Guid = serviceOrder.Guid };
         }
+
+        public static ServiceOrder ToServiceOrder(this CreateServiceOrderDTO createServiceOrderDTO)
+        {
+            return new ServiceOrder { Description = createServiceOrderDTO.Description };
+        }
     }
 }

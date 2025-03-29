@@ -18,9 +18,13 @@ namespace ServiceOrderCreatorApi.Repositories
             _context = context;
         }
 
-        public Task<bool> CreateAsync(ServiceOrder serviceOrder)
+        public async Task<ServiceOrder> CreateAsync(ServiceOrder serviceOrder)
         {
-            throw new NotImplementedException();
+            await _context.ServiceOrders.AddAsync(serviceOrder);
+
+            await _context.SaveChangesAsync();
+
+            return serviceOrder;
         }
 
         public Task<bool> DeleteAsync(string guid)

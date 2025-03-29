@@ -26,9 +26,18 @@ namespace ServiceOrderCreatorApi.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> CreateAsync(CreateServiceOrderDTO createServiceOrderDTO)
+        public async Task<ServiceOrderDTO> CreateAsync(
+            string userId,
+            CreateServiceOrderDTO createServiceOrderDTO
+        )
         {
-            throw new NotImplementedException();
+            var serviceOrder = createServiceOrderDTO.ToServiceOrder();
+
+            serviceOrder.Guid = Guid.NewGuid().ToString();
+
+            serviceOrder = await _serviceOrderRepository.CreateAsync(serviceOrder);
+
+            return serviceOrder.ToDTO();
         }
 
         public Task<bool> DeleteAsync(string userId, string guid)

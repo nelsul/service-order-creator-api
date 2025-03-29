@@ -12,7 +12,10 @@ namespace ServiceOrderCreatorApi.Interfaces.Services
 
         Task<ServiceOrderDTO> GetByIdAsync(string userId, string guid);
 
-        Task<bool> CreateAsync(CreateServiceOrderDTO createServiceOrderDTO);
+        Task<ServiceOrderDTO> CreateAsync(
+            string userId,
+            CreateServiceOrderDTO createServiceOrderDTO
+        );
 
         Task<ServiceOrderDTO> UpdateAsync(
             string userId,
