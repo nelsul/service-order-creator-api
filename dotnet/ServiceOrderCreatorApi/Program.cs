@@ -5,8 +5,10 @@ using Microsoft.IdentityModel.Tokens;
 using ServiceOrderCreatorApi.Data;
 using ServiceOrderCreatorApi.Helpers;
 using ServiceOrderCreatorApi.Interfaces;
+using ServiceOrderCreatorApi.Interfaces.Repositories;
 using ServiceOrderCreatorApi.Interfaces.Services;
 using ServiceOrderCreatorApi.Models;
+using ServiceOrderCreatorApi.Repositories;
 using ServiceOrderCreatorApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -66,6 +68,8 @@ builder
 builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IServiceOrderRepository, ServiceOrderRepository>();
+builder.Services.AddScoped<IServiceOrderService, ServiceOrderService>();
 builder.Services.AddScoped<IImageStorageService, ImageStorageService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
