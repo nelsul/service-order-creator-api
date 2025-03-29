@@ -9,5 +9,7 @@ namespace ServiceOrderCreatorApi.Models
     public class User : IdentityUser
     {
         public string ProfilePictureFile { get; set; } = string.Empty;
+
+        public List<ServiceOrder> ServiceOrders { get; set; } = [];
     }
 }

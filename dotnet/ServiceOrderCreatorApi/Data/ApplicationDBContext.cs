@@ -13,6 +13,8 @@ namespace ServiceOrderCreatorApi.Data
     public class ApplicationDBContext(DbContextOptions dbContextOptions)
         : IdentityDbContext<User>(dbContextOptions)
     {
+        public DbSet<ServiceOrder> ServiceOrders { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
