@@ -9,9 +9,20 @@ namespace ServiceOrderCreatorApi.Services
 {
     public class ImageStorageService : IImageStorageService
     {
-        public Task<FileContentResult> GetAsync(string filePath, int? width, int? height)
+        public async Task<byte[]> GetAsync(string filePath, int? width, int? height)
         {
-            throw new NotImplementedException();
+            if (!File.Exists(filePath))
+            {
+                throw new FileNotFoundException("Image not found");
+            }
+
+            using FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            using MemoryStream memoryStream = new MemoryStream();
+
+            await fileStream.CopyToAsync(memoryStream);
+            memoryStream.Position = 0;
+
+            return memoryStream.ToArray();
         }
 
         public async Task<string> StoreAsync(string folderPath, IFormFile imageFile)

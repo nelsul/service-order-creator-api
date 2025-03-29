@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceOrderCreatorApi.DTOs.User;
 using ServiceOrderCreatorApi.Interfaces;
@@ -18,6 +19,7 @@ namespace ServiceOrderCreatorApi.Services
         private readonly SignInManager<User> _signInManager;
         private readonly IImageStorageService _imageStorageService;
         private readonly ITokenService _tokenService;
+        private readonly string _storagePath;
 
         public UserService(
             UserManager<User> userManager,
@@ -30,6 +32,18 @@ namespace ServiceOrderCreatorApi.Services
             _signInManager = signInManager;
             _imageStorageService = imageStorageService;
             _tokenService = tokenService;
+            _storagePath = "/Users/nelsonneto/dev/service_order_creator/api/storage/profile-pics";
+        }
+
+        public async Task<byte[]> GetPicture(RequestPictureUserDTO requestPictureUserDTO)
+        {
+            var image = await _imageStorageService.GetAsync(
+                Path.Combine(_storagePath, requestPictureUserDTO.FileName),
+                requestPictureUserDTO.Width,
+                requestPictureUserDTO.Height
+            );
+
+            return image;
         }
 
         public async Task<UserDTO> LoginAsync(LoginUserDTO loginUserDTO)
@@ -90,10 +104,7 @@ namespace ServiceOrderCreatorApi.Services
 
         private async Task<string> SaveProfilePic(IFormFile image)
         {
-            var fileName = await _imageStorageService.StoreAsync(
-                "/Users/nelsonneto/dev/service_order_creator/api/storage/profile-pics",
-                image
-            );
+            var fileName = await _imageStorageService.StoreAsync(_storagePath, image);
 
             return fileName;
         }
