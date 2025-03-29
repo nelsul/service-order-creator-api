@@ -44,5 +44,31 @@ namespace ServiceOrderCreatorApi.Controllers
                 return StatusCode(500, new { Message = ex.Message, Details = ex.Data });
             }
         }
+
+        [HttpGet("picture-by-id/")]
+        public async Task<IActionResult> GetPictureById(
+            [FromQuery] RequestPictureByIdUserDTO requestPictureByIdUserDTO
+        )
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var image = await _userService.GetPictureById(requestPictureByIdUserDTO);
+
+                return File(image, "image/jpeg");
+            }
+            catch (FileNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message, Details = ex.Data });
+            }
+        }
     }
 }

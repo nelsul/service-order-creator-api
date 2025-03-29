@@ -14,5 +14,7 @@ namespace ServiceOrderCreatorApi.Interfaces.Services
         Task<UserDTO> LoginAsync(LoginUserDTO loginUserDTO);
 
         Task<byte[]> GetPicture(RequestPictureUserDTO requestPictureUserDTO);
+
+        Task<byte[]> GetPictureById(RequestPictureByIdUserDTO requestPictureByIdUserDTO);
     }
 }

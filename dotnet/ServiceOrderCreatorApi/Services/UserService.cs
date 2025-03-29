@@ -46,6 +46,28 @@ namespace ServiceOrderCreatorApi.Services
             return image;
         }
 
+        public async Task<byte[]> GetPictureById(
+            RequestPictureByIdUserDTO requestPictureByIdUserDTO
+        )
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u =>
+                u.Id == requestPictureByIdUserDTO.Id
+            );
+
+            if (user == null)
+            {
+                throw new FileNotFoundException("User not found");
+            }
+
+            var pictureDTO = new RequestPictureUserDTO
+            {
+                FileName = user.ProfilePictureFile,
+                Width = requestPictureByIdUserDTO.Width,
+                Height = requestPictureByIdUserDTO.Height,
+            };
+            return await GetPicture(pictureDTO);
+        }
+
         public async Task<UserDTO> LoginAsync(LoginUserDTO loginUserDTO)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(u =>
