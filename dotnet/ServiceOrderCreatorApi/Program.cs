@@ -1,10 +1,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ServiceOrderCreatorApi.Data;
+using ServiceOrderCreatorApi.Interfaces.Services;
 using ServiceOrderCreatorApi.Models;
+using ServiceOrderCreatorApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
@@ -23,6 +26,8 @@ builder
     })
     .AddEntityFrameworkStores<ApplicationDBContext>();
 
+builder.Services.AddScoped<IUserService, UserService>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -36,5 +41,6 @@ if (app.Environment.IsDevelopment())
 
 // app.UseHttpsRedirection();
 
+app.MapControllers();
 
 app.Run();
