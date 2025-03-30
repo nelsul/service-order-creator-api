@@ -19,8 +19,6 @@ namespace ServiceOrderCreatorApi.Mappers
             {
                 var data = JsonSerializer.Deserialize<ServiceTypeData>(serviceType.OptionsData);
 
-                Console.Write(data);
-
                 version = data.Version;
                 options = data.Options;
             }

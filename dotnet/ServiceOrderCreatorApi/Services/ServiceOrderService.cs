@@ -58,6 +58,8 @@ namespace ServiceOrderCreatorApi.Services
                 serviceOrder.Id,
                 null,
                 null,
+                null,
+                null,
                 serviceOrder.ImageFiles
             );
 
@@ -180,6 +182,8 @@ namespace ServiceOrderCreatorApi.Services
                 serviceOrder.Id,
                 null,
                 null,
+                null,
+                null,
                 serviceOrder.ImageFiles
             );
 
@@ -196,6 +200,8 @@ namespace ServiceOrderCreatorApi.Services
                 Id,
                 updateServiceOrderDTO.Title,
                 updateServiceOrderDTO.Description,
+                updateServiceOrderDTO.ServiceTypeId,
+                updateServiceOrderDTO.Options,
                 null
             );
 
@@ -206,6 +212,8 @@ namespace ServiceOrderCreatorApi.Services
             Guid Id,
             string? title,
             string? description,
+            int? serviceTypeId,
+            ServiceOrderOptionsData? optionsData,
             List<string>? images
         )
         {
@@ -225,6 +233,10 @@ namespace ServiceOrderCreatorApi.Services
             {
                 serviceOrder.Description = description;
             }
+
+            if (serviceTypeId != null && serviceOrder.ServiceTypeId != serviceTypeId) { }
+
+            if (optionsData != null) { }
 
             if (images != null)
             {
