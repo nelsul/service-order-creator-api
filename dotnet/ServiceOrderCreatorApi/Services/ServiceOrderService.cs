@@ -111,6 +111,40 @@ namespace ServiceOrderCreatorApi.Services
             return serviceOrder.ToDTO();
         }
 
+        public async Task<byte[]> GetImageAsyc(
+            Guid userId,
+            RequestImageServiceOrderDTO requestImageServiceOrderDTO
+        )
+        {
+            var serviceOrder = await _serviceOrderRepository.GetByIdAsync(
+                Guid.Parse(requestImageServiceOrderDTO.Id)
+            );
+
+            if (serviceOrder == null)
+            {
+                throw new FileNotFoundException("Service Order not found");
+            }
+
+            if (serviceOrder.UserId != userId.ToString())
+            {
+                throw new UnauthorizedAccessException(
+                    "Not uthorized to make changes to this service order"
+                );
+            }
+
+            var image = await _imageStorageService.GetAsync(
+                Path.Combine(
+                    _storagePath,
+                    serviceOrder.Id.ToString(),
+                    requestImageServiceOrderDTO.FileName!
+                ),
+                requestImageServiceOrderDTO.Width,
+                requestImageServiceOrderDTO.Height
+            );
+
+            return image;
+        }
+
         public async Task<ServiceOrderDTO> RemoveImageAsync(
             Guid userId,
             RemoveImageServiceOrderDTO removeImageServiceOrderDTO

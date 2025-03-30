@@ -31,5 +31,10 @@ namespace ServiceOrderCreatorApi.Interfaces.Services
             Guid userId,
             RemoveImageServiceOrderDTO removeImageServiceOrderDTO
         );
+
+        Task<byte[]> GetImageAsyc(
+            Guid userId,
+            RequestImageServiceOrderDTO requestImageServiceOrderDTO
+        );
     }
 }

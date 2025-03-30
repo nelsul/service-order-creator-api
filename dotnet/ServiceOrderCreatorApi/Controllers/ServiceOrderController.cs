@@ -122,6 +122,38 @@ namespace ServiceOrderCreatorApi.Controllers
             }
         }
 
+        [HttpGet("image")]
+        public async Task<IActionResult> GetImage(
+            [FromQuery] RequestImageServiceOrderDTO requestImageServiceOrderDTO
+        )
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return Unauthorized("Invalid token.");
+                }
+
+                var image = await _serviceOrderService.GetImageAsyc(
+                    Guid.Parse(userId),
+                    requestImageServiceOrderDTO
+                );
+
+                return File(image, "image/jpeg");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message, Details = ex.Data });
+            }
+        }
+
         [HttpPost("image")]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> AddImage(
