@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using ServiceOrderCreatorApi.Data;
 using ServiceOrderCreatorApi.Interfaces.Repositories;
 using ServiceOrderCreatorApi.Models;
@@ -17,9 +18,13 @@ namespace ServiceOrderCreatorApi.Repositories
             _context = context;
         }
 
-        public Task<ServiceType> CreateAsync(ServiceType serviceType)
+        public async Task<ServiceType> CreateAsync(ServiceType serviceType)
         {
-            throw new NotImplementedException();
+            await _context.ServiceTypes.AddAsync(serviceType);
+
+            await _context.SaveChangesAsync();
+
+            return serviceType;
         }
 
         public Task<bool> DeleteAsync(int Id)
@@ -27,19 +32,27 @@ namespace ServiceOrderCreatorApi.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<List<ServiceType>> GetAllAsync()
+        public async Task<List<ServiceType>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var serviceTypes = await _context.ServiceTypes.ToListAsync();
+
+            return serviceTypes;
         }
 
-        public Task<ServiceType?> GetByIdAsync(int Id)
+        public async Task<ServiceType?> GetByIdAsync(int Id)
         {
-            throw new NotImplementedException();
+            var serviceType = await _context.ServiceTypes.FirstOrDefaultAsync(st => st.Id == Id);
+
+            return serviceType;
         }
 
-        public Task<ServiceType> UpdateAsync(ServiceType serviceType)
+        public async Task<ServiceType> UpdateAsync(ServiceType serviceType)
         {
-            throw new NotImplementedException();
+            _context.ServiceTypes.Update(serviceType);
+
+            await _context.SaveChangesAsync();
+
+            return serviceType;
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ServiceOrderCreatorApi.DTOs.ServiceType;
 using ServiceOrderCreatorApi.Interfaces.Repositories;
 using ServiceOrderCreatorApi.Interfaces.Services;
+using ServiceOrderCreatorApi.Mappers;
 
 namespace ServiceOrderCreatorApi.Services
 {
@@ -17,9 +18,13 @@ namespace ServiceOrderCreatorApi.Services
             _serviceTypeRepository = serviceTypeRepository;
         }
 
-        public Task<ServiceTypeDTO> CreateAsync(CreateServiceTypeDTO createServiceTypeDTO)
+        public async Task<ServiceTypeDTO> CreateAsync(CreateServiceTypeDTO createServiceTypeDTO)
         {
-            throw new NotImplementedException();
+            var serviceType = createServiceTypeDTO.ToServiceType();
+
+            serviceType = await _serviceTypeRepository.CreateAsync(serviceType);
+
+            return serviceType.ToDTO();
         }
 
         public Task<bool> DeleteAsync(int Id)
@@ -27,9 +32,11 @@ namespace ServiceOrderCreatorApi.Services
             throw new NotImplementedException();
         }
 
-        public Task<List<ServiceTypeDTO>> GetAllAsync()
+        public async Task<List<ServiceTypeDTO>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var serviceTypes = await _serviceTypeRepository.GetAllAsync();
+
+            return serviceTypes.Select(st => st.ToDTO()).ToList();
         }
 
         public Task<ServiceTypeDTO> GetByIdAsync(int Id)
