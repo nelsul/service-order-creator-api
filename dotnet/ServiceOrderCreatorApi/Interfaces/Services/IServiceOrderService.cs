@@ -10,17 +10,17 @@ namespace ServiceOrderCreatorApi.Interfaces.Services
     {
         Task<List<ShortServiceOrderDTO>> GetAllAsync(Guid userId);
 
-        Task<ServiceOrderDTO> GetByIdAsync(Guid userId, Guid publicId);
+        Task<ServiceOrderDTO> GetByIdAsync(Guid userId, Guid Id);
 
         Task<ServiceOrderDTO> CreateAsync(Guid userId, CreateServiceOrderDTO createServiceOrderDTO);
 
         Task<ServiceOrderDTO> UpdateAsync(
             Guid userId,
-            Guid publicId,
+            Guid Id,
             UpdateServiceOrderDTO updateServiceOrderDTO
         );
 
-        Task<bool> DeleteAsync(Guid userId, Guid publicId);
+        Task<bool> DeleteAsync(Guid userId, Guid Id);
 
         Task<ServiceOrderDTO> AddImageAsync(
             Guid userId,

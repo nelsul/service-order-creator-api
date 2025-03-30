@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ServiceOrderCreatorApi.Migrations
 {
     /// <inheritdoc />
-    public partial class Users : Migration
+    public partial class ServiceOrderMigrateV2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -82,6 +82,22 @@ namespace ServiceOrderCreatorApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                }
+            );
+
+            migrationBuilder.CreateTable(
+                name: "ServiceTypes",
+                columns: table => new
+                {
+                    Id = table
+                        .Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OptionsData = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServiceTypes", x => x.Id);
                 }
             );
 
@@ -218,13 +234,46 @@ namespace ServiceOrderCreatorApi.Migrations
                 }
             );
 
+            migrationBuilder.CreateTable(
+                name: "ServiceOrders",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageFiles = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ServiceTypeId = table.Column<int>(type: "int", nullable: true),
+                    ServiceTypeOptionsData = table.Column<string>(
+                        type: "nvarchar(max)",
+                        nullable: false
+                    ),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServiceOrders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ServiceOrders_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id"
+                    );
+                    table.ForeignKey(
+                        name: "FK_ServiceOrders_ServiceTypes_ServiceTypeId",
+                        column: x => x.ServiceTypeId,
+                        principalTable: "ServiceTypes",
+                        principalColumn: "Id"
+                    );
+                }
+            );
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "55bf4984-aa4d-433d-ac07-24aeb67e4d10", null, "Admin", "ADMIN" },
-                    { "a5398235-54e6-443f-a59e-12029a600178", null, "User", "USER" },
+                    { "6db5d151-b3b7-4fbf-a44f-42ce7f37935b", null, "Admin", "ADMIN" },
+                    { "b89135e6-5171-4077-9d88-00232522c74a", null, "User", "USER" },
                 }
             );
 
@@ -273,6 +322,18 @@ namespace ServiceOrderCreatorApi.Migrations
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL"
             );
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServiceOrders_ServiceTypeId",
+                table: "ServiceOrders",
+                column: "ServiceTypeId"
+            );
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServiceOrders_UserId",
+                table: "ServiceOrders",
+                column: "UserId"
+            );
         }
 
         /// <inheritdoc />
@@ -288,9 +349,13 @@ namespace ServiceOrderCreatorApi.Migrations
 
             migrationBuilder.DropTable(name: "AspNetUserTokens");
 
+            migrationBuilder.DropTable(name: "ServiceOrders");
+
             migrationBuilder.DropTable(name: "AspNetRoles");
 
             migrationBuilder.DropTable(name: "AspNetUsers");
+
+            migrationBuilder.DropTable(name: "ServiceTypes");
         }
     }
 }

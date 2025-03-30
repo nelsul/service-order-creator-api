@@ -7,7 +7,7 @@ namespace ServiceOrderCreatorApi.DTOs.ServiceOrder
 {
     public class ServiceOrderDTO
     {
-        public Guid PublicId { get; set; }
+        public Guid Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public List<string> ImageFiles { get; set; } = [];

@@ -51,13 +51,13 @@ namespace ServiceOrderCreatorApi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "0c1aaac7-5518-4fd2-9416-684a7ff173fb",
+                            Id = "6db5d151-b3b7-4fbf-a44f-42ce7f37935b",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "1c38d7d0-0fb6-4d71-b549-aab7a6235121",
+                            Id = "b89135e6-5171-4077-9d88-00232522c74a",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -171,11 +171,9 @@ namespace ServiceOrderCreatorApi.Migrations
 
             modelBuilder.Entity("ServiceOrderCreatorApi.Models.ServiceOrder", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -185,24 +183,48 @@ namespace ServiceOrderCreatorApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("PublicId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("ServiceTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ServiceTypeOptionsData")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("ServiceTypeId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ServiceOrders");
+                });
+
+            modelBuilder.Entity("ServiceOrderCreatorApi.Models.ServiceType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("OptionsData")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ServiceTypes");
                 });
 
             modelBuilder.Entity("ServiceOrderCreatorApi.Models.User", b =>
@@ -327,11 +349,22 @@ namespace ServiceOrderCreatorApi.Migrations
 
             modelBuilder.Entity("ServiceOrderCreatorApi.Models.ServiceOrder", b =>
                 {
+                    b.HasOne("ServiceOrderCreatorApi.Models.ServiceType", "ServiceType")
+                        .WithMany("ServiceOrders")
+                        .HasForeignKey("ServiceTypeId");
+
                     b.HasOne("ServiceOrderCreatorApi.Models.User", "User")
                         .WithMany("ServiceOrders")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("ServiceType");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ServiceOrderCreatorApi.Models.ServiceType", b =>
+                {
+                    b.Navigation("ServiceOrders");
                 });
 
             modelBuilder.Entity("ServiceOrderCreatorApi.Models.User", b =>

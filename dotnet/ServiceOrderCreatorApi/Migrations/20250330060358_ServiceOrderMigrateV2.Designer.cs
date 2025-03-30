@@ -12,8 +12,8 @@ using ServiceOrderCreatorApi.Data;
 namespace ServiceOrderCreatorApi.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250329172552_Users")]
-    partial class Users
+    [Migration("20250330060358_ServiceOrderMigrateV2")]
+    partial class ServiceOrderMigrateV2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,13 +54,13 @@ namespace ServiceOrderCreatorApi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "55bf4984-aa4d-433d-ac07-24aeb67e4d10",
+                            Id = "6db5d151-b3b7-4fbf-a44f-42ce7f37935b",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "a5398235-54e6-443f-a59e-12029a600178",
+                            Id = "b89135e6-5171-4077-9d88-00232522c74a",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -170,6 +170,64 @@ namespace ServiceOrderCreatorApi.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("ServiceOrderCreatorApi.Models.ServiceOrder", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.PrimitiveCollection<string>("ImageFiles")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ServiceTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ServiceTypeOptionsData")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceTypeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ServiceOrders");
+                });
+
+            modelBuilder.Entity("ServiceOrderCreatorApi.Models.ServiceType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("OptionsData")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ServiceTypes");
                 });
 
             modelBuilder.Entity("ServiceOrderCreatorApi.Models.User", b =>
@@ -290,6 +348,31 @@ namespace ServiceOrderCreatorApi.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ServiceOrderCreatorApi.Models.ServiceOrder", b =>
+                {
+                    b.HasOne("ServiceOrderCreatorApi.Models.ServiceType", "ServiceType")
+                        .WithMany("ServiceOrders")
+                        .HasForeignKey("ServiceTypeId");
+
+                    b.HasOne("ServiceOrderCreatorApi.Models.User", "User")
+                        .WithMany("ServiceOrders")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("ServiceType");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ServiceOrderCreatorApi.Models.ServiceType", b =>
+                {
+                    b.Navigation("ServiceOrders");
+                });
+
+            modelBuilder.Entity("ServiceOrderCreatorApi.Models.User", b =>
+                {
+                    b.Navigation("ServiceOrders");
                 });
 #pragma warning restore 612, 618
         }

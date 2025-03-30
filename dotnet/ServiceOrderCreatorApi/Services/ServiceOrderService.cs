@@ -32,7 +32,7 @@ namespace ServiceOrderCreatorApi.Services
         )
         {
             var serviceOrder = await _serviceOrderRepository.GetByIdAsync(
-                Guid.Parse(addImageServiceOrderDTO.PublicId)
+                Guid.Parse(addImageServiceOrderDTO.Id)
             );
 
             if (serviceOrder == null)
@@ -40,7 +40,7 @@ namespace ServiceOrderCreatorApi.Services
                 throw new FileNotFoundException("Service Order not found");
             }
 
-            if (serviceOrder.UserId != userId)
+            if (serviceOrder.UserId != userId.ToString())
             {
                 throw new UnauthorizedAccessException(
                     "Not uthorized to make changes to this service order"
@@ -48,14 +48,14 @@ namespace ServiceOrderCreatorApi.Services
             }
 
             var fileName = await _imageStorageService.StoreAsync(
-                Path.Combine(_storagePath, serviceOrder.PublicId.ToString()),
+                Path.Combine(_storagePath, serviceOrder.Id.ToString()),
                 addImageServiceOrderDTO.Image!
             );
 
             serviceOrder.ImageFiles.Add(fileName);
 
             serviceOrder = await UpdateChangesAsync(
-                serviceOrder.PublicId,
+                serviceOrder.Id,
                 null,
                 null,
                 serviceOrder.ImageFiles
@@ -71,16 +71,16 @@ namespace ServiceOrderCreatorApi.Services
         {
             var serviceOrder = createServiceOrderDTO.ToServiceOrder();
 
-            serviceOrder.PublicId = Guid.NewGuid();
+            serviceOrder.Id = Guid.NewGuid();
 
-            serviceOrder.UserId = userId;
+            serviceOrder.UserId = userId.ToString();
 
             serviceOrder = await _serviceOrderRepository.CreateAsync(serviceOrder);
 
             return serviceOrder.ToDTO();
         }
 
-        public Task<bool> DeleteAsync(Guid userId, Guid publicId)
+        public Task<bool> DeleteAsync(Guid userId, Guid Id)
         {
             throw new NotImplementedException();
         }
@@ -92,16 +92,16 @@ namespace ServiceOrderCreatorApi.Services
             return [.. serviceOrders.Select(so => so.ToShortDTO())];
         }
 
-        public async Task<ServiceOrderDTO> GetByIdAsync(Guid userId, Guid publicId)
+        public async Task<ServiceOrderDTO> GetByIdAsync(Guid userId, Guid Id)
         {
-            var serviceOrder = await _serviceOrderRepository.GetByIdAsync(publicId);
+            var serviceOrder = await _serviceOrderRepository.GetByIdAsync(Id);
 
             if (serviceOrder == null)
             {
                 throw new FileNotFoundException("Service Order not found");
             }
 
-            if (serviceOrder.UserId != userId)
+            if (serviceOrder.UserId != userId.ToString())
             {
                 throw new UnauthorizedAccessException(
                     "Not uthorized to make changes to this service order"
@@ -117,7 +117,7 @@ namespace ServiceOrderCreatorApi.Services
         )
         {
             var serviceOrder = await _serviceOrderRepository.GetByIdAsync(
-                Guid.Parse(removeImageServiceOrderDTO.PublicId)
+                Guid.Parse(removeImageServiceOrderDTO.Id)
             );
 
             if (serviceOrder == null)
@@ -125,7 +125,7 @@ namespace ServiceOrderCreatorApi.Services
                 throw new FileNotFoundException("Service Order not found");
             }
 
-            if (serviceOrder.UserId != userId)
+            if (serviceOrder.UserId != userId.ToString())
             {
                 throw new UnauthorizedAccessException(
                     "Not uthorized to make changes to this service order"
@@ -135,7 +135,7 @@ namespace ServiceOrderCreatorApi.Services
             await _imageStorageService.DeleteAsync(
                 Path.Combine(
                     _storagePath,
-                    serviceOrder.PublicId.ToString(),
+                    serviceOrder.Id.ToString(),
                     removeImageServiceOrderDTO.ImageFileName!
                 )
             );
@@ -143,7 +143,7 @@ namespace ServiceOrderCreatorApi.Services
             serviceOrder.ImageFiles.Remove(removeImageServiceOrderDTO.ImageFileName!);
 
             serviceOrder = await UpdateChangesAsync(
-                serviceOrder.PublicId,
+                serviceOrder.Id,
                 null,
                 null,
                 serviceOrder.ImageFiles
@@ -154,12 +154,12 @@ namespace ServiceOrderCreatorApi.Services
 
         public async Task<ServiceOrderDTO> UpdateAsync(
             Guid userId,
-            Guid publicId,
+            Guid Id,
             UpdateServiceOrderDTO updateServiceOrderDTO
         )
         {
             var serviceOrder = await UpdateChangesAsync(
-                publicId,
+                Id,
                 updateServiceOrderDTO.Title,
                 updateServiceOrderDTO.Description,
                 null
@@ -169,13 +169,13 @@ namespace ServiceOrderCreatorApi.Services
         }
 
         private async Task<ServiceOrder> UpdateChangesAsync(
-            Guid publicId,
+            Guid Id,
             string? title,
             string? description,
             List<string>? images
         )
         {
-            var serviceOrder = await _serviceOrderRepository.GetByIdAsync(publicId);
+            var serviceOrder = await _serviceOrderRepository.GetByIdAsync(Id);
 
             if (serviceOrder == null)
             {

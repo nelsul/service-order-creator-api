@@ -14,6 +14,7 @@ namespace ServiceOrderCreatorApi.Data
         : IdentityDbContext<User>(dbContextOptions)
     {
         public DbSet<ServiceOrder> ServiceOrders { get; set; }
+        public DbSet<ServiceType> ServiceTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -26,13 +27,19 @@ namespace ServiceOrderCreatorApi.Data
             ];
 
             builder.Entity<IdentityRole>().HasData(roles);
+
+            builder
+                .Entity<ServiceOrder>()
+                .HasOne(so => so.User)
+                .WithMany(u => u.ServiceOrders)
+                .HasForeignKey(so => so.UserId);
         }
 
-        // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        // {
-        //     optionsBuilder.ConfigureWarnings(warnings =>
-        //         warnings.Ignore(RelationalEventId.PendingModelChangesWarning)
-        //     );
-        // }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.ConfigureWarnings(warnings =>
+                warnings.Ignore(RelationalEventId.PendingModelChangesWarning)
+            );
+        }
     }
 }

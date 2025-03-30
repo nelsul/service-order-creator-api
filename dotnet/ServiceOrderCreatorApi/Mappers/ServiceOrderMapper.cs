@@ -13,7 +13,7 @@ namespace ServiceOrderCreatorApi.Mappers
         {
             return new ServiceOrderDTO
             {
-                PublicId = serviceOrder.PublicId,
+                Id = serviceOrder.Id,
                 Title = serviceOrder.Title,
                 Description = serviceOrder.Description,
                 ImageFiles = serviceOrder.ImageFiles,
@@ -22,11 +22,7 @@ namespace ServiceOrderCreatorApi.Mappers
 
         public static ShortServiceOrderDTO ToShortDTO(this ServiceOrder serviceOrder)
         {
-            return new ShortServiceOrderDTO
-            {
-                PublicId = serviceOrder.PublicId,
-                Title = serviceOrder.Title,
-            };
+            return new ShortServiceOrderDTO { Id = serviceOrder.Id, Title = serviceOrder.Title };
         }
 
         public static ServiceOrder ToServiceOrder(this CreateServiceOrderDTO createServiceOrderDTO)

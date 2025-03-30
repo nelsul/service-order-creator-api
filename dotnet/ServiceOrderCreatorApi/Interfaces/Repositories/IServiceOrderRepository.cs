@@ -10,12 +10,12 @@ namespace ServiceOrderCreatorApi.Interfaces.Repositories
     {
         Task<List<ServiceOrder>> GetAllByUserIdAsync(Guid userId);
 
-        Task<ServiceOrder?> GetByIdAsync(Guid publicId);
+        Task<ServiceOrder?> GetByIdAsync(Guid Id);
 
         Task<ServiceOrder> CreateAsync(ServiceOrder serviceOrder);
 
         Task<ServiceOrder> UpdateAsync(ServiceOrder serviceOrder);
 
-        Task<bool> DeleteAsync(Guid publicId);
+        Task<bool> DeleteAsync(Guid Id);
     }
 }

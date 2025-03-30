@@ -9,7 +9,7 @@ namespace ServiceOrderCreatorApi.DTOs.ServiceOrder
     public class AddImageServiceOrderDTO
     {
         [Required]
-        public string PublicId { get; set; } = string.Empty;
+        public string Id { get; set; } = string.Empty;
 
         [Required]
         public IFormFile? Image { get; set; }

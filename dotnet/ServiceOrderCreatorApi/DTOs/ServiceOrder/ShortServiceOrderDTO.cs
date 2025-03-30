@@ -7,7 +7,7 @@ namespace ServiceOrderCreatorApi.DTOs.ServiceOrder
 {
     public class ShortServiceOrderDTO
     {
-        public Guid PublicId { get; set; }
+        public Guid Id { get; set; }
 
         public string Title { get; set; } = string.Empty;
     }
