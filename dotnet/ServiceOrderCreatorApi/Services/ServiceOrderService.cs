@@ -57,6 +57,7 @@ namespace ServiceOrderCreatorApi.Services
             serviceOrder = await UpdateChangesAsync(
                 serviceOrder.PublicId,
                 null,
+                null,
                 serviceOrder.ImageFiles
             );
 
@@ -144,6 +145,7 @@ namespace ServiceOrderCreatorApi.Services
             serviceOrder = await UpdateChangesAsync(
                 serviceOrder.PublicId,
                 null,
+                null,
                 serviceOrder.ImageFiles
             );
 
@@ -158,6 +160,7 @@ namespace ServiceOrderCreatorApi.Services
         {
             var serviceOrder = await UpdateChangesAsync(
                 publicId,
+                updateServiceOrderDTO.Title,
                 updateServiceOrderDTO.Description,
                 null
             );
@@ -167,6 +170,7 @@ namespace ServiceOrderCreatorApi.Services
 
         private async Task<ServiceOrder> UpdateChangesAsync(
             Guid publicId,
+            string? title,
             string? description,
             List<string>? images
         )
@@ -176,6 +180,11 @@ namespace ServiceOrderCreatorApi.Services
             if (serviceOrder == null)
             {
                 throw new Exception("Service order not found to update");
+            }
+
+            if (title != null)
+            {
+                serviceOrder.Title = title;
             }
 
             if (description != null)

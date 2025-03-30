@@ -93,6 +93,35 @@ namespace ServiceOrderCreatorApi.Controllers
             }
         }
 
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> UpdateById(
+            [FromRoute] Guid id,
+            [FromBody] UpdateServiceOrderDTO updateServiceOrderDTO
+        )
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return Unauthorized("Invalid token.");
+                }
+
+                var serviceOrder = await _serviceOrderService.UpdateAsync(
+                    Guid.Parse(userId),
+                    id,
+                    updateServiceOrderDTO
+                );
+
+                return Ok(serviceOrder);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message, Details = ex.Data });
+            }
+        }
+
         [HttpPost("image")]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> AddImage(
