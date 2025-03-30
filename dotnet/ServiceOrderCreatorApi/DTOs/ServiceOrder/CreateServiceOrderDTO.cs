@@ -9,7 +9,9 @@ namespace ServiceOrderCreatorApi.DTOs.ServiceOrder
     public class CreateServiceOrderDTO
     {
         [Required]
-        [MinLength(10)]
+        public string Title { get; set; } = string.Empty;
+
+        [Required]
         public string Description { get; set; } = string.Empty;
     }
 }

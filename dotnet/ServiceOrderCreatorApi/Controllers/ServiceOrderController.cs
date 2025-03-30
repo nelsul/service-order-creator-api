@@ -34,9 +34,31 @@ namespace ServiceOrderCreatorApi.Controllers
                     return Unauthorized("Invalid token.");
                 }
 
-                var serviceOrders = await _serviceOrderService.GetAllAsync(userId);
+                var serviceOrders = await _serviceOrderService.GetAllAsync(Guid.Parse(userId));
 
                 return Ok(serviceOrders);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message, Details = ex.Data });
+            }
+        }
+
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return Unauthorized("Invalid token.");
+                }
+
+                var serviceOrder = await _serviceOrderService.GetByIdAsync(Guid.Parse(userId), id);
+
+                return Ok(serviceOrder);
             }
             catch (Exception ex)
             {
@@ -59,7 +81,7 @@ namespace ServiceOrderCreatorApi.Controllers
                 }
 
                 var serviceOrder = await _serviceOrderService.CreateAsync(
-                    userId,
+                    Guid.Parse(userId),
                     createServiceOrderDTO
                 );
 
@@ -87,8 +109,35 @@ namespace ServiceOrderCreatorApi.Controllers
                 }
 
                 var serviceOrder = await _serviceOrderService.AddImageAsync(
-                    userId,
+                    Guid.Parse(userId),
                     addImageServiceOrderDTO
+                );
+
+                return Ok(serviceOrder);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message, Details = ex.Data });
+            }
+        }
+
+        [HttpDelete("image")]
+        public async Task<IActionResult> RemoveImage(
+            [FromBody] RemoveImageServiceOrderDTO removeImageServiceOrderDTO
+        )
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return Unauthorized("Invalid token.");
+                }
+
+                var serviceOrder = await _serviceOrderService.RemoveImageAsync(
+                    Guid.Parse(userId),
+                    removeImageServiceOrderDTO
                 );
 
                 return Ok(serviceOrder);

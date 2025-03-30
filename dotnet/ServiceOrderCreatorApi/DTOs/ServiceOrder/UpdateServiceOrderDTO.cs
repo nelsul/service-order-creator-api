@@ -8,7 +8,10 @@ namespace ServiceOrderCreatorApi.DTOs.ServiceOrder
 {
     public class UpdateServiceOrderDTO
     {
+        [MinLength(3)]
+        public string? Title { get; set; }
+
         [MinLength(10)]
-        public string Description { get; set; } = string.Empty;
+        public string? Description { get; set; }
     }
 }

@@ -9,10 +9,9 @@ namespace ServiceOrderCreatorApi.DTOs.ServiceOrder
     public class RemoveImageServiceOrderDTO
     {
         [Required]
-        [MinLength(3)]
-        public string Guid { get; set; } = string.Empty;
+        public string PublicId { get; set; } = string.Empty;
 
         [Required]
-        public IFormFile? Image { get; set; }
+        public string ImageFileName { get; set; } = string.Empty;
     }
 }

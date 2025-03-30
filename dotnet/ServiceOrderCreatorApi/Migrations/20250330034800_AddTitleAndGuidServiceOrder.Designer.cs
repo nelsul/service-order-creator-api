@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServiceOrderCreatorApi.Data;
 
@@ -11,9 +12,11 @@ using ServiceOrderCreatorApi.Data;
 namespace ServiceOrderCreatorApi.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250330034800_AddTitleAndGuidServiceOrder")]
+    partial class AddTitleAndGuidServiceOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,13 +54,13 @@ namespace ServiceOrderCreatorApi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "0c1aaac7-5518-4fd2-9416-684a7ff173fb",
+                            Id = "a469ad8a-071b-4f46-82e6-0c978f65bcda",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "1c38d7d0-0fb6-4d71-b549-aab7a6235121",
+                            Id = "805777ee-eca6-41da-9cf2-ac961babee57",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -181,26 +184,23 @@ namespace ServiceOrderCreatorApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("Guid")
+                        .HasColumnType("uniqueidentifier");
+
                     b.PrimitiveCollection<string>("ImageFiles")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("PublicId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("ServiceOrders");
                 });
@@ -329,7 +329,7 @@ namespace ServiceOrderCreatorApi.Migrations
                 {
                     b.HasOne("ServiceOrderCreatorApi.Models.User", "User")
                         .WithMany("ServiceOrders")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });

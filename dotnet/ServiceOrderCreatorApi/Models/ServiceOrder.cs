@@ -8,11 +8,12 @@ namespace ServiceOrderCreatorApi.Models
     public class ServiceOrder
     {
         public int Id { get; set; }
-        public string Guid { get; set; } = string.Empty;
+        public Guid PublicId { get; set; }
+        public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public List<string> ImageFiles { get; set; } = [];
 
-        public string? UserId { get; set; }
+        public Guid? UserId { get; set; }
 
         public User? User { get; set; }
     }

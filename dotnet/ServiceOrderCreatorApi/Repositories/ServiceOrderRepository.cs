@@ -27,12 +27,12 @@ namespace ServiceOrderCreatorApi.Repositories
             return serviceOrder;
         }
 
-        public Task<bool> DeleteAsync(string guid)
+        public Task<bool> DeleteAsync(Guid publicId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<ServiceOrder>> GetAllByUserIdAsync(string userId)
+        public async Task<List<ServiceOrder>> GetAllByUserIdAsync(Guid userId)
         {
             var serviceOrders = await _context
                 .ServiceOrders.Where(so => so.UserId == userId)
@@ -41,10 +41,10 @@ namespace ServiceOrderCreatorApi.Repositories
             return serviceOrders;
         }
 
-        public async Task<ServiceOrder?> GetByIdAsync(string guid)
+        public async Task<ServiceOrder?> GetByIdAsync(Guid publicId)
         {
             var serviceOrder = await _context.ServiceOrders.FirstOrDefaultAsync(so =>
-                so.Guid == guid
+                so.PublicId == publicId
             );
 
             return serviceOrder;

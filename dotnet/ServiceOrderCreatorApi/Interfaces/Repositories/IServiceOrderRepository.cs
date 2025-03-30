@@ -8,14 +8,14 @@ namespace ServiceOrderCreatorApi.Interfaces.Repositories
 {
     public interface IServiceOrderRepository
     {
-        Task<List<ServiceOrder>> GetAllByUserIdAsync(string userId);
+        Task<List<ServiceOrder>> GetAllByUserIdAsync(Guid userId);
 
-        Task<ServiceOrder?> GetByIdAsync(string guid);
+        Task<ServiceOrder?> GetByIdAsync(Guid publicId);
 
         Task<ServiceOrder> CreateAsync(ServiceOrder serviceOrder);
 
         Task<ServiceOrder> UpdateAsync(ServiceOrder serviceOrder);
 
-        Task<bool> DeleteAsync(string guid);
+        Task<bool> DeleteAsync(Guid publicId);
     }
 }
