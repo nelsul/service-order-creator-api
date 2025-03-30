@@ -16,10 +16,10 @@ namespace ServiceOrderCreatorApi.DTOs.ServiceOrder
         [Length(3, 120)]
         public string FileName { get; set; } = string.Empty;
 
-        [Range(50, 1080)]
+        [Range(50, 3840)]
         public uint? Width { get; set; }
 
-        [Range(50, 1080)]
+        [Range(50, 2160)]
         public uint? Height { get; set; }
     }
 }

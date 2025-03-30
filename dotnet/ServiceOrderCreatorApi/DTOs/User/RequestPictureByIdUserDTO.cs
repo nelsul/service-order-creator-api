@@ -12,10 +12,10 @@ namespace ServiceOrderCreatorApi.DTOs.User
         [MinLength(3)]
         public string Id { get; set; } = string.Empty;
 
-        [Range(50, 1080)]
+        [Range(50, 3840)]
         public uint? Width { get; set; }
 
-        [Range(50, 1080)]
+        [Range(50, 2160)]
         public uint? Height { get; set; }
     }
 }
