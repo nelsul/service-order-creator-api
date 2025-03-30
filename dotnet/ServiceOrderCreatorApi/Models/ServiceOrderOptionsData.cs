@@ -9,6 +9,6 @@ namespace ServiceOrderCreatorApi.Models
     {
         public int Version { get; set; }
 
-        public List<(string title, bool selected)> Options { get; set; }
+        public List<ServiceOrderOptionsDataItem> Options { get; set; }
     }
 }

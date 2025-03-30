@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using ServiceOrderCreatorApi.DTOs.ServiceOrder;
 using ServiceOrderCreatorApi.Interfaces.Repositories;
@@ -13,15 +14,18 @@ namespace ServiceOrderCreatorApi.Services
     public class ServiceOrderService : IServiceOrderService
     {
         private readonly IServiceOrderRepository _serviceOrderRepository;
+        private readonly IServiceOrderTypeService _serviceOrderTypeService;
         private readonly IImageStorageService _imageStorageService;
         private readonly string _storagePath;
 
         public ServiceOrderService(
             IServiceOrderRepository serviceOrderRepository,
+            IServiceOrderTypeService serviceOrderTypeService,
             IImageStorageService imageStorageService
         )
         {
             _serviceOrderRepository = serviceOrderRepository;
+            _serviceOrderTypeService = serviceOrderTypeService;
             _imageStorageService = imageStorageService;
             _storagePath = "/Users/nelsonneto/dev/service_order_creator/api/storage/service-orders";
         }
@@ -234,9 +238,22 @@ namespace ServiceOrderCreatorApi.Services
                 serviceOrder.Description = description;
             }
 
-            if (serviceTypeId != null && serviceOrder.ServiceTypeId != serviceTypeId) { }
+            if (serviceTypeId != null && serviceOrder.ServiceTypeId != serviceTypeId)
+            {
+                var newOptions = await _serviceOrderTypeService.GenerateOrderOptions(
+                    (int)serviceTypeId
+                );
 
-            if (optionsData != null) { }
+                serviceOrder.ServiceTypeOptionsData = JsonSerializer.Serialize(newOptions);
+                serviceOrder.ServiceTypeId = serviceTypeId;
+            }
+
+            if (optionsData != null)
+            {
+                serviceOrder.ServiceTypeOptionsData = JsonSerializer.Serialize(optionsData);
+
+                await _serviceOrderTypeService.CheckOrderOptions(serviceOrder);
+            }
 
             if (images != null)
             {
