@@ -32,7 +32,7 @@ namespace ServiceOrderCreatorApi.Services
             _signInManager = signInManager;
             _imageStorageService = imageStorageService;
             _tokenService = tokenService;
-            _storagePath = "/Users/nelsonneto/dev/service_order_creator/api/storage/profile-pics";
+            _storagePath = "./storage/profile-pics";
         }
 
         public async Task<byte[]> GetPicture(RequestPictureUserDTO requestPictureUserDTO)

@@ -3,7 +3,8 @@ services:
     build: .
     user: root
     volumes:
-      - ./dotnet:/app/
+      # - ./dotnet:/app/
+      - ./storage:/app/storage
     container_name: service_order_creator_api
     ports:
       - "3016:8080"

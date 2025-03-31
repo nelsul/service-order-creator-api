@@ -27,7 +27,7 @@ namespace ServiceOrderCreatorApi.Services
             _serviceOrderRepository = serviceOrderRepository;
             _serviceOrderTypeService = serviceOrderTypeService;
             _imageStorageService = imageStorageService;
-            _storagePath = "/Users/nelsonneto/dev/service_order_creator/api/storage/service-orders";
+            _storagePath = "./storage/service-orders";
         }
 
         public async Task<ServiceOrderDTO> AddImageAsync(

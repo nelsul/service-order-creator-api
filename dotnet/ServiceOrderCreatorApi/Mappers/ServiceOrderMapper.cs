@@ -27,6 +27,7 @@ namespace ServiceOrderCreatorApi.Mappers
                 Title = serviceOrder.Title,
                 Description = serviceOrder.Description,
                 ImageFiles = serviceOrder.ImageFiles,
+                ServiceTypeId = serviceOrder.ServiceTypeId,
                 Options = optionsData,
             };
         }
